@@ -58,6 +58,7 @@ import org.spongepowered.common.entity.PlayerTracker;
 import org.spongepowered.common.event.SpongeCommonEventFactory;
 import org.spongepowered.common.interfaces.world.IMixinWorld;
 import org.spongepowered.common.registry.provider.DirectionFacingProvider;
+import org.spongepowered.common.world.FakePlayer;
 
 import java.util.Optional;
 
@@ -100,8 +101,17 @@ public abstract class MixinItemInWorldManager {
 
             return false;
         } else {
+            Cause cause;
+            // Handle fake players
+            if (FakePlayer.Controller.getCurrentCause() != null) {
+                cause = FakePlayer.Controller.getCurrentCause();
+            } else if (player instanceof FakePlayer) {
+                cause = Cause.of(NamedCause.simulated(((EntityPlayer) player).getGameProfile()));
+            } else {
+                cause = Cause.of(NamedCause.source(player));
+            }
             BlockSnapshot currentSnapshot = ((World) worldIn).createSnapshot(pos.getX(), pos.getY(), pos.getZ());
-            InteractBlockEvent.Secondary event = SpongeCommonEventFactory.callInteractBlockEventSecondary(Cause.of(NamedCause.source(player)),
+            InteractBlockEvent.Secondary event = SpongeCommonEventFactory.callInteractBlockEventSecondary(cause,
                     Optional.of(new Vector3d(offsetX, offsetY, offsetZ)), currentSnapshot, DirectionFacingProvider.getInstance().getKey(side).get());
 
             if (event.isCancelled()) {

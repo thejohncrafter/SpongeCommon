@@ -63,6 +63,7 @@ import org.spongepowered.api.world.gen.GenerationPopulator;
 import org.spongepowered.api.world.gen.Populator;
 import org.spongepowered.api.world.gen.PopulatorType;
 import org.spongepowered.api.world.gen.WorldGenerator;
+import org.spongepowered.api.world.gen.structure.Structure;
 import org.spongepowered.common.SpongeImpl;
 import org.spongepowered.common.event.InternalNamedCauses;
 import org.spongepowered.common.event.tracking.CauseTracker;
@@ -73,6 +74,8 @@ import org.spongepowered.common.interfaces.world.IMixinWorldServer;
 import org.spongepowered.common.interfaces.world.biome.IBiomeGenBase;
 import org.spongepowered.common.interfaces.world.gen.IChunkProviderOverworld;
 import org.spongepowered.common.interfaces.world.gen.IFlaggedPopulator;
+import org.spongepowered.common.util.NonNullArrayList;
+import org.spongepowered.common.util.StaticMixinHelper;
 import org.spongepowered.common.util.gen.ByteArrayMutableBiomeBuffer;
 import org.spongepowered.common.util.gen.ChunkPrimerBuffer;
 import org.spongepowered.common.world.gen.populators.SnowPopulator;
@@ -96,6 +99,7 @@ public class SpongeChunkGenerator implements WorldGenerator, IChunkGenerator {
     protected GenerationPopulator baseGenerator;
     protected List<GenerationPopulator> genpop;
     protected List<Populator> pop;
+    protected List<Structure> structures;
     protected Map<BiomeType, BiomeGenerationSettings> biomeSettings;
     protected final World world;
     private final ByteArrayMutableBiomeBuffer cachedBiomes;
@@ -113,8 +117,11 @@ public class SpongeChunkGenerator implements WorldGenerator, IChunkGenerator {
         this.cachedBiomes = new ByteArrayMutableBiomeBuffer(Vector2i.ZERO, CHUNK_AREA);
         this.cachedBiomes.detach();
 
-        this.genpop = Lists.newArrayList();
-        this.pop = Lists.newArrayList();
+        // If people start being stupid I'll replace these with lists that
+        // validate that the added pop/genpop are not structures
+        this.genpop = new NonNullArrayList<>();
+        this.structures = new NonNullArrayList<>();
+        this.pop = new NonNullArrayList<>();
         this.biomeSettings = Maps.newHashMap();
         this.rand = new Random(world.getSeed());
         this.noise4 = new NoiseGeneratorPerlin(this.rand, 4);
@@ -144,8 +151,35 @@ public class SpongeChunkGenerator implements WorldGenerator, IChunkGenerator {
         return this.genpop;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public <G extends GenerationPopulator> List<G> getGenerationPopulators(Class<G> type) {
+        return (List<G>) this.genpop.stream().filter((p) -> {
+            return type.isAssignableFrom(p.getClass());
+        }).collect(Collectors.toList());
+    }
+
     public void setGenerationPopulators(List<GenerationPopulator> generationPopulators) {
-        this.genpop = Lists.newArrayList(generationPopulators);
+        this.genpop.clear();
+        this.genpop.addAll(generationPopulators);
+    }
+
+    @Override
+    public List<Structure> getStructures() {
+        return this.structures;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <S extends Structure> List<S> getStructures(Class<S> type) {
+        return (List<S>) this.structures.stream().filter((p) -> {
+            return type.isAssignableFrom(p.getClass());
+        }).collect(Collectors.toList());
+    }
+
+    public void setStructures(List<Structure> structs) {
+        this.structures.clear();
+        this.structures.addAll(structs);
     }
 
     @Override
@@ -153,8 +187,17 @@ public class SpongeChunkGenerator implements WorldGenerator, IChunkGenerator {
         return this.pop;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public <P extends Populator> List<P> getPopulators(Class<P> type) {
+        return (List<P>) this.pop.stream().filter((p) -> {
+            return type.isAssignableFrom(p.getClass());
+        }).collect(Collectors.toList());
+    }
+
     public void setPopulators(List<Populator> populators) {
-        this.pop = Lists.newArrayList(populators);
+        this.pop.clear();
+        this.pop.addAll(populators);
     }
 
     public Map<BiomeType, BiomeGenerationSettings> getBiomeOverrides() {
@@ -187,22 +230,6 @@ public class SpongeChunkGenerator implements WorldGenerator, IChunkGenerator {
         return this.biomeSettings.get(type);
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <G extends GenerationPopulator> List<G> getGenerationPopulators(Class<G> type) {
-        return (List<G>) this.genpop.stream().filter((p) -> {
-            return type.isAssignableFrom(p.getClass());
-        }).collect(Collectors.toList());
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <P extends Populator> List<P> getPopulators(Class<P> type) {
-        return (List<P>) this.pop.stream().filter((p) -> {
-            return type.isAssignableFrom(p.getClass());
-        }).collect(Collectors.toList());
-    }
-
     @Override
     public Chunk provideChunk(int chunkX, int chunkZ) {
         this.rand.setSeed((long) chunkX * 341873128712L + (long) chunkZ * 132897987541L);
@@ -220,6 +247,11 @@ public class SpongeChunkGenerator implements WorldGenerator, IChunkGenerator {
         // Apply the generator populators to complete the blockBuffer
         for (GenerationPopulator populator : this.genpop) {
             populator.populate((org.spongepowered.api.world.World) this.world, blockBuffer, biomeBuffer);
+        }
+        
+        // Call the structures after the genpop is applied
+        for(Structure structure: this.structures) {
+            structure.populate((org.spongepowered.api.world.World) this.world, blockBuffer, biomeBuffer);
         }
 
         // Get unique biomes to determine what generator populators to run
@@ -241,6 +273,9 @@ public class SpongeChunkGenerator implements WorldGenerator, IChunkGenerator {
             }
             for (GenerationPopulator populator : this.biomeSettings.get(type).getGenerationPopulators()) {
                 populator.populate((org.spongepowered.api.world.World) this.world, blockBuffer, biomeBuffer);
+            }
+            for (Structure structure : this.biomeSettings.get(type).getStructures()) {
+                structure.populate((org.spongepowered.api.world.World) this.world, blockBuffer, biomeBuffer);
             }
         }
 
@@ -293,6 +328,27 @@ public class SpongeChunkGenerator implements WorldGenerator, IChunkGenerator {
         Sponge.getGame().getEventManager().post(SpongeEventFactory.createPopulateChunkEventPre(populateCause, populators, chunk));
 
         List<String> flags = Lists.newArrayList();
+        // We deliberately did not pass the structures to the event, cancelling
+        // these could be...bad
+        for (Structure structure : this.structures) {
+            StaticMixinHelper.runningGenerator = structure.getType();
+            if (structure instanceof IFlaggedPopulator) {
+                ((IFlaggedPopulator) structure).populate(chunkProvider, chunk, this.rand, flags);
+            } else {
+                structure.populate(chunk, this.rand);
+            }
+            StaticMixinHelper.runningGenerator = null;
+        }
+        // Run the biome structures as well
+        for (Structure structure : this.biomeSettings.get(biome).getStructures()) {
+            StaticMixinHelper.runningGenerator = structure.getType();
+            if (structure instanceof IFlaggedPopulator) {
+                ((IFlaggedPopulator) structure).populate(chunkProvider, chunk, this.rand, flags);
+            } else {
+                structure.populate(chunk, this.rand);
+            }
+            StaticMixinHelper.runningGenerator = null;
+        }
         for (Populator populator : populators) {
             final PopulatorType type = populator.getType();
             if (type == null) {
@@ -329,9 +385,9 @@ public class SpongeChunkGenerator implements WorldGenerator, IChunkGenerator {
     public boolean generateStructures(Chunk chunk, int chunkX, int chunkZ) {
         boolean flag = false;
         if (chunk.getInhabitedTime() < 3600L) {
-            for (Populator populator : this.pop) {
-                if (populator instanceof StructureOceanMonument) {
-                    flag |= ((StructureOceanMonument) populator).generateStructure(this.world, this.rand, new ChunkCoordIntPair(chunkX, chunkZ));
+            for (Structure structure : this.structures) {
+                if (structure instanceof StructureOceanMonument) {
+                    flag |= ((StructureOceanMonument) structure).generateStructure(this.world, this.rand, new ChunkCoordIntPair(chunkX, chunkZ));
                 }
             }
         }
@@ -352,9 +408,9 @@ public class SpongeChunkGenerator implements WorldGenerator, IChunkGenerator {
     @Override
     public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position) {
         if ("Stronghold".equals(structureName)) {
-            for (GenerationPopulator gen : this.genpop) {
-                if (gen instanceof MapGenStronghold) {
-                    return ((MapGenStronghold) gen).getClosestStrongholdPos(worldIn, position);
+            for (Structure structure : this.structures) {
+                if (structure instanceof MapGenStronghold) {
+                    return ((MapGenStronghold) structure).getClosestStrongholdPos(worldIn, position);
                 }
             }
         }

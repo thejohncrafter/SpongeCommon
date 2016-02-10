@@ -24,37 +24,22 @@
  */
 package org.spongepowered.common.mixin.core.command;
 
-import net.minecraft.command.CommandWorldBorder;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.world.border.WorldBorder;
+import net.minecraft.command.server.CommandSetDefaultSpawnpoint;
+import net.minecraft.network.Packet;
+import net.minecraft.server.management.ServerConfigurationManager;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
-import javax.annotation.Nullable;
+@Mixin(CommandSetDefaultSpawnpoint.class)
+public abstract class MixinCommandSetDefaultSpawnpoint {
 
-@Mixin(CommandWorldBorder.class)
-public abstract class MixinCommandWorldBorder {
-
-    @Nullable private ICommandSender sender;
-
-    @Inject(method = "processCommand(Lnet/minecraft/command/ICommandSender;[Ljava/lang/String;)V", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/command/CommandWorldBorder;getWorldBorder()Lnet/minecraft/world/border/WorldBorder;"))
-    private void beforeGetWorldBorder(ICommandSender sender, String[] args, CallbackInfo ci) {
-        this.sender = sender;
-    }
-
-    /**
-     * @author Minecrell
-     * @reason Returns the correct worldborder for the current world of the command sender
-     */
-    @Overwrite
-    protected WorldBorder getWorldBorder() {
-        ICommandSender sender = this.sender;
-        this.sender = null;
-        return sender.getEntityWorld().getWorldBorder();
+    // Set new spawn point packet only to players in the affected dimensions
+    @Redirect(method = "processCommand", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/server/management/ServerConfigurationManager;sendPacketToAllPlayers(Lnet/minecraft/network/Packet;)V"))
+    private void onSendSpawnPointPacket(ServerConfigurationManager manager, Packet packet, ICommandSender sender, String[] args) {
+        manager.sendPacketToAllPlayersInDimension(packet, sender.getEntityWorld().provider.getDimensionId());
     }
 
 }

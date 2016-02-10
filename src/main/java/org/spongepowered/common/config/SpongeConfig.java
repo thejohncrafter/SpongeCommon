@@ -399,9 +399,18 @@ public class SpongeConfig<T extends SpongeConfig.ConfigBase> {
         @Setting(comment = "A mapping from unqualified command alias to plugin id of the plugin that should handle a certain command")
         private Map<String, String> aliases = new HashMap<>();
 
+        @Setting(value = "multi-world-patches", comment = "Patches the specified commands to respect the world of the sender instead of applying the "
+                + "changes on the main overworld.")
+        private Map<String, Boolean> patches = new HashMap<>();
+
         public Map<String, String> getAliases() {
             return this.aliases;
         }
+
+        public Map<String, Boolean> getMultiWorldPatches() {
+            return this.patches;
+        }
+
     }
 
     @ConfigSerializable
@@ -808,6 +817,7 @@ public class SpongeConfig<T extends SpongeConfig.ConfigBase> {
         public void setExploitPatches(boolean enableExploitPatches) {
             this.enableExploitPatches = enableExploitPatches;
         }
+
     }
 
     @ConfigSerializable

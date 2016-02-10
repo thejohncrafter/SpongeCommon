@@ -1,0 +1,17 @@
+{
+    "minVersion": "0.5.1",
+    "package": "org.spongepowered.common.mixin.command",
+    "refmap": "mixins.common.refmap.json",
+    "plugin": "org.spongepowered.common.mixin.plugin.MultiWorldCommandPlugin",
+    "mixins": [
+        "MixinCommandGameRule",
+        "MixinCommandSeed",
+        "MixinCommandTime",
+        "MixinCommandToggleDownfall",
+        "MixinCommandWeather",
+        "MixinCommandWorldBorder"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

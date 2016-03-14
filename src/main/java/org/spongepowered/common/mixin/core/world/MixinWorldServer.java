@@ -79,7 +79,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
-import java.util.concurrent.Future;
 
 import javax.annotation.Nullable;
 
@@ -98,7 +97,7 @@ public abstract class MixinWorldServer extends MixinWorld {
     @Shadow public abstract ListenableFuture<Object> addScheduledTask(Runnable r);
 
     @Override
-    public Future<Object> post(Runnable r) {
+    public ListenableFuture<Object> post(Runnable r) {
         SpongeImpl.getLogger().info("1 task posted.");
         return addScheduledTask(r);
     }

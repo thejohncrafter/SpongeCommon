@@ -26,6 +26,7 @@ package org.spongepowered.common.mixin.core.world;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+import com.google.common.util.concurrent.ListenableFuture;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEventData;
 import net.minecraft.block.state.IBlockState;
@@ -78,6 +79,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.concurrent.Future;
 
 import javax.annotation.Nullable;
 
@@ -93,6 +95,13 @@ public abstract class MixinWorldServer extends MixinWorld {
     @Shadow public abstract void updateBlockTick(BlockPos p_175654_1_, Block p_175654_2_, int p_175654_3_, int p_175654_4_);
     @Shadow public abstract boolean fireBlockEvent(BlockEventData event);
     @Shadow @Nullable public abstract net.minecraft.entity.Entity getEntityFromUuid(UUID uuid);
+    @Shadow public abstract ListenableFuture<Object> addScheduledTask(Runnable r);
+
+    @Override
+    public Future<Object> post(Runnable r) {
+        SpongeImpl.getLogger().info("1 task posted.");
+        return addScheduledTask(r);
+    }
 
     @Inject(method = "createSpawnPosition(Lnet/minecraft/world/WorldSettings;)V", at = @At("HEAD"), cancellable = true)
     public void onCreateSpawnPosition(WorldSettings settings, CallbackInfo ci) {

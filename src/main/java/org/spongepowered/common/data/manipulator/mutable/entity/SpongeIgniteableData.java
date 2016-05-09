@@ -26,9 +26,7 @@ package org.spongepowered.common.data.manipulator.mutable.entity;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.entity.ImmutableIgniteableData;
 import org.spongepowered.api.data.manipulator.mutable.entity.IgniteableData;
@@ -83,14 +81,6 @@ public class SpongeIgniteableData extends AbstractData<IgniteableData, Immutable
     @Override
     public ImmutableIgniteableData asImmutable() {
         return new ImmutableSpongeIgniteableData(this.fireTicks, this.fireDelay);
-    }
-
-    @Override
-    public int compareTo(IgniteableData o) {
-        return ComparisonChain.start()
-                .compare(o.fireTicks().get().intValue(), this.fireTicks)
-                .compare(o.fireDelay().get().intValue(), this.fireDelay)
-                .result();
     }
 
     @Override

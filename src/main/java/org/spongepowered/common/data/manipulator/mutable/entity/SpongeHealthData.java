@@ -26,9 +26,7 @@ package org.spongepowered.common.data.manipulator.mutable.entity;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.entity.ImmutableHealthData;
 import org.spongepowered.api.data.manipulator.mutable.entity.HealthData;
@@ -82,14 +80,6 @@ public class SpongeHealthData extends AbstractData<HealthData, ImmutableHealthDa
     @Override
     public ImmutableHealthData asImmutable() {
         return new ImmutableSpongeHealthData(this.health, this.maxHealth);
-    }
-
-    @Override
-    public int compareTo(HealthData o) {
-        return ComparisonChain.start()
-            .compare(o.health().get().doubleValue(), this.health)
-            .compare(o.maxHealth().get().doubleValue(), this.maxHealth)
-            .result();
     }
 
     @Override

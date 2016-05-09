@@ -119,10 +119,10 @@ public class KeyRegistry {
         if (!keyMap.isEmpty()) {
             return;
         }
-        keyMap.put("axis", makeSingleKey(Axis.class, Value.class, of("Axis")));
-        keyMap.put("color", makeSingleKey(Color.class, Value.class, of("Color")));
-        keyMap.put("health", makeSingleKey(Double.class, MutableBoundedValue.class, of("Health")));
-        keyMap.put("max_health", makeSingleKey(Double.class, MutableBoundedValue.class, of("MaxHealth")));
+        keyMap.put("axis", makeSingleKey(Axis.class, Value.class, of("Axis"), "sponge:axis", "Axis"));
+        keyMap.put("color", makeSingleKey(Color.class, Value.class, of("Color"), "sponge:color", "Color"));
+        keyMap.put("health", makeSingleKey(Double.class, MutableBoundedValue.class, of("Health"), "sponge:health", "Health"));
+        keyMap.put("max_health", makeSingleKey(Double.class, MutableBoundedValue.class, of("MaxHealth"), "sponge:max_health", "Max Health"));
         keyMap.put("display_name", makeSingleKey(Text.class, Value.class, of("DisplayName")));
         keyMap.put("career", makeSingleKey(Career.class, Value.class, of("Career")));
         keyMap.put("sign_lines", makeListKey(Text.class, of("SignLines")));

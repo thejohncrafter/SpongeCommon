@@ -27,7 +27,6 @@ package org.spongepowered.common.data.manipulator.immutable.common;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.manipulator.DataManipulator;
@@ -70,13 +69,6 @@ public abstract class AbstractImmutableBooleanData<I extends ImmutableDataManipu
     public DataContainer toContainer() {
         return super.toContainer()
             .set(this.usedKey, this.value);
-    }
-
-    @Override
-    public int compareTo(I o) {
-        return ComparisonChain.start()
-            .compare(o.get(this.usedKey).get(), this.getValue())
-            .result();
     }
 
 }

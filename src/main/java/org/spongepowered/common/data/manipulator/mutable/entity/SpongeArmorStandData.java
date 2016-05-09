@@ -24,7 +24,6 @@
  */
 package org.spongepowered.common.data.manipulator.mutable.entity;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.entity.ImmutableArmorStandData;
@@ -115,17 +114,6 @@ public class SpongeArmorStandData extends AbstractData<ArmorStandData, Immutable
     @Override
     public ImmutableArmorStandData asImmutable() {
         return ImmutableDataCachingUtil.getManipulator(ImmutableSpongeArmorStandData.class, this.marker, this.small, this.gravity, this.arms, this.basePlate);
-    }
-
-    @Override
-    public int compareTo(ArmorStandData o) {
-        return ComparisonChain.start()
-                .compare(o.arms().get(), this.arms)
-                .compare(o.marker().get(), this.marker)
-                .compare(o.basePlate().get(), this.basePlate)
-                .compare(o.gravity().get(), this.gravity)
-                .compare(o.small().get(), this.small)
-                .result();
     }
 
     @Override

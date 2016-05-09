@@ -24,13 +24,11 @@
  */
 package org.spongepowered.common.data.manipulator.immutable.entity;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.entity.ImmutableInvisibilityData;
 import org.spongepowered.api.data.manipulator.mutable.entity.InvisibilityData;
 import org.spongepowered.api.data.value.immutable.ImmutableValue;
-import org.spongepowered.common.data.manipulator.immutable.common.AbstractImmutableBooleanData;
 import org.spongepowered.common.data.manipulator.immutable.common.AbstractImmutableData;
 import org.spongepowered.common.data.manipulator.mutable.entity.SpongeInvisibilityData;
 import org.spongepowered.common.data.value.immutable.ImmutableSpongeValue;
@@ -100,12 +98,4 @@ public class ImmutableSpongeInvisibilityData extends AbstractImmutableData<Immut
         return new SpongeInvisibilityData(this.invisible, this.collision, this.untargetable);
     }
 
-    @Override
-    public int compareTo(ImmutableInvisibilityData o) {
-        return ComparisonChain.start()
-                .compare(o.ignoresCollisionDetection().get(), this.collision)
-                .compare(o.invisible().get(), this.invisible)
-                .compare(o.untargetable().get(), this.untargetable)
-                .result();
-    }
 }

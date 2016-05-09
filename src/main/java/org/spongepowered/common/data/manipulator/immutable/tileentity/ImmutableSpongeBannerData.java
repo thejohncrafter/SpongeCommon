@@ -26,7 +26,6 @@ package org.spongepowered.common.data.manipulator.immutable.tileentity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableList;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.key.Keys;
@@ -91,14 +90,6 @@ public class ImmutableSpongeBannerData extends AbstractImmutableData<ImmutableBa
     @Override
     public BannerData asMutable() {
         return new SpongeBannerData(this.base, this.layers);
-    }
-
-    @Override
-    public int compareTo(ImmutableBannerData o) {
-        return ComparisonChain.start()
-                .compare(o.baseColor().get().getId(), this.base.getId())
-                .compare(o.patterns().get().containsAll(this.layers), this.layers.containsAll(o.patterns().get()))
-                .result();
     }
 
     @Override

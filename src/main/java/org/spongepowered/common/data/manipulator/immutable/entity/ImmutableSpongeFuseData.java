@@ -24,7 +24,6 @@
  */
 package org.spongepowered.common.data.manipulator.immutable.entity;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.entity.ImmutableFuseData;
 import org.spongepowered.api.data.manipulator.mutable.entity.FuseData;
@@ -76,14 +75,6 @@ public class ImmutableSpongeFuseData extends AbstractImmutableData<ImmutableFuse
     @Override
     public FuseData asMutable() {
         return new SpongeFuseData(this.fuseDuration, this.ticksRemaining);
-    }
-
-    @Override
-    public int compareTo(ImmutableFuseData that) {
-        return ComparisonChain.start()
-                .compare(this.fuseDuration, (int) that.fuseDuration().get())
-                .compare(this.ticksRemaining, (int) that.ticksRemaining().get())
-                .result();
     }
 
 }

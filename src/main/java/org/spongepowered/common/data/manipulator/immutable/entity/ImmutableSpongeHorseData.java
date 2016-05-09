@@ -24,9 +24,7 @@
  */
 package org.spongepowered.common.data.manipulator.immutable.entity;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.entity.ImmutableHorseData;
 import org.spongepowered.api.data.manipulator.mutable.entity.HorseData;
@@ -97,15 +95,6 @@ public class ImmutableSpongeHorseData extends AbstractImmutableData<ImmutableHor
                 .set(Keys.HORSE_COLOR.getQuery(), this.horseColor.getId())
                 .set(Keys.HORSE_STYLE.getQuery(), this.horseStyle.getId())
                 .set(Keys.HORSE_VARIANT.getQuery(), this.horseVariant.getId());
-    }
-
-    @Override
-    public int compareTo(ImmutableHorseData other) {
-        return ComparisonChain.start()
-                .compare(this.horseColor.getId(), other.color().get().getId())
-                .compare(this.horseStyle.getId(), other.style().get().getId())
-                .compare(this.horseVariant.getId(), other.variant().get().getId())
-                .result();
     }
 
     @Override

@@ -24,9 +24,7 @@
  */
 package org.spongepowered.common.data.manipulator.mutable.entity;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.entity.ImmutableBreathingData;
 import org.spongepowered.api.data.manipulator.mutable.entity.BreathingData;
@@ -59,14 +57,6 @@ public class SpongeBreathingData extends AbstractData<BreathingData, ImmutableBr
     @Override
     public ImmutableBreathingData asImmutable() {
         return new ImmutableSpongeBreathingData(this.maxAir, this.remainingAir);
-    }
-
-    @Override
-    public int compareTo(BreathingData o) {
-        return ComparisonChain.start()
-                .compare(o.maxAir().get().intValue(), this.maxAir)
-                .compare(o.remainingAir().get().intValue(), this.remainingAir)
-                .result();
     }
 
     @Override

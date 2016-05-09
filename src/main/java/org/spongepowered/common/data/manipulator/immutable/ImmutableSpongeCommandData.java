@@ -25,7 +25,6 @@
 package org.spongepowered.common.data.manipulator.immutable;
 
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.ImmutableCommandData;
 import org.spongepowered.api.data.manipulator.mutable.CommandData;
@@ -35,7 +34,6 @@ import org.spongepowered.api.data.value.immutable.ImmutableValue;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.common.data.manipulator.immutable.common.AbstractImmutableData;
 import org.spongepowered.common.data.manipulator.mutable.SpongeCommandData;
-import org.spongepowered.common.data.util.DataConstants;
 import org.spongepowered.common.data.value.SpongeValueFactory;
 import org.spongepowered.common.data.value.immutable.ImmutableSpongeOptionalValue;
 import org.spongepowered.common.data.value.immutable.ImmutableSpongeValue;
@@ -111,11 +109,6 @@ public class ImmutableSpongeCommandData extends AbstractImmutableData<ImmutableC
                 .set(Keys.SUCCESS_COUNT, this.success)
                 .set(Keys.TRACKS_OUTPUT, this.tracks)
                 .set(Keys.LAST_COMMAND_OUTPUT.getQuery(), this.lastOutput == null ? "" : this.lastOutput.toString());
-    }
-
-    @Override
-    public int compareTo(ImmutableCommandData o) {
-        return 0;
     }
 
     public String getStoredCommand() {

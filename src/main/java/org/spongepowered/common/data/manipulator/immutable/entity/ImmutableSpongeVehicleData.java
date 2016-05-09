@@ -26,7 +26,6 @@ package org.spongepowered.common.data.manipulator.immutable.entity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.entity.ImmutableVehicleData;
@@ -80,14 +79,6 @@ public class ImmutableSpongeVehicleData extends AbstractImmutableData<ImmutableV
         return super.toContainer()
                 .set(Keys.VEHICLE, this.vehicle)
                 .set(Keys.BASE_VEHICLE, this.baseVehicle);
-    }
-
-    @Override
-    public int compareTo(ImmutableVehicleData o) {
-        return ComparisonChain.start()
-                .compare(o.vehicle().get().getUniqueId().orElse(null), this.vehicle.getUniqueId().orElse(null))
-                .compare(o.baseVehicle().get().getUniqueId().orElse(null), this.baseVehicle.getUniqueId().orElse(null))
-                .result();
     }
 
     public EntitySnapshot getVehicle() {

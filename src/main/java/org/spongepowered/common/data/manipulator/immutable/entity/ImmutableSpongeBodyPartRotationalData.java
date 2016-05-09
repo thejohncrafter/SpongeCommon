@@ -30,7 +30,6 @@ import static org.spongepowered.api.data.Queries.POSITION_Y;
 import static org.spongepowered.api.data.Queries.POSITION_Z;
 
 import com.flowpowered.math.vector.Vector3d;
-import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableMap;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.key.Keys;
@@ -85,21 +84,6 @@ public class ImmutableSpongeBodyPartRotationalData extends AbstractImmutableData
     @Override
     public BodyPartRotationalData asMutable() {
         return new SpongeBodyPartRotationalData(this.rotations);
-    }
-
-    @Override
-    public int compareTo(ImmutableBodyPartRotationalData o) {
-        int mapSizeComp = Integer.compare(this.rotations.size(), o.partRotation().size());
-
-        if (mapSizeComp != 0) {
-            return mapSizeComp;
-        }
-        ComparisonChain comparison = ComparisonChain.start();
-        Map<BodyPart, Vector3d> parts = o.partRotation().get();
-        parts.forEach((part, vec) -> {
-            comparison.compare(vec, this.rotations.get(part));
-        });
-        return comparison.result();
     }
 
     @Override

@@ -24,7 +24,6 @@
  */
 package org.spongepowered.common.data.manipulator.mutable.item;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.item.ImmutableHideData;
@@ -101,18 +100,6 @@ public class SpongeHideData extends AbstractData<HideData, ImmutableHideData> im
     public ImmutableHideData asImmutable() {
         return ImmutableDataCachingUtil.getManipulator(ImmutableSpongeHideData.class, this.enchantments, this.attributes, this.unbreakable,
                 this.canDestroy, this.canPlace, this.miscellaneous);
-    }
-
-    @Override
-    public int compareTo(HideData o) {
-        return ComparisonChain.start()
-                .compare(this.enchantments, o.hideEnchantments().get())
-                .compare(this.attributes, o.hideAttributes().get())
-                .compare(this.unbreakable, o.hideUnbreakable().get())
-                .compare(this.canDestroy, o.hideCanDestroy().get())
-                .compare(this.canPlace, o.hideCanPlace().get())
-                .compare(this.miscellaneous, o.hideMiscellaneous().get())
-                .result();
     }
 
     @Override

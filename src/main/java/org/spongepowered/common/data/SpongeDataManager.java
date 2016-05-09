@@ -44,6 +44,7 @@ import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.manipulator.DataManipulator;
 import org.spongepowered.api.data.manipulator.DataManipulatorBuilder;
 import org.spongepowered.api.data.manipulator.ImmutableDataManipulator;
+import org.spongepowered.api.data.manipulator.generator.CustomDataProvider;
 import org.spongepowered.api.data.persistence.AbstractDataBuilder;
 import org.spongepowered.api.data.persistence.DataBuilder;
 import org.spongepowered.api.data.persistence.DataContentUpdater;
@@ -318,6 +319,13 @@ public final class SpongeDataManager implements DataManager {
     @Override
     public <T> Optional<DataSerializer<T>> getSerializer(Class<T> objectclass) {
         return Optional.ofNullable((DataSerializer<T>) this.dataSerializerMap.get(checkNotNull(objectclass, "Target class cannot be null!")));
+    }
+
+    @Override
+    public <T extends DataManipulator<T, I>, I extends ImmutableDataManipulator<I, T>> CustomDataProvider.TypeBuilder<T, I> createCustomBuilder(
+            Class<T> manipulatorClass, Class<I> immutableClass) {
+        // TODO
+        return null;
     }
 
     public Optional<DataManipulatorBuilder<?, ?>> getWildManipulatorBuilder(Class<? extends DataManipulator<?, ?>> manipulatorClass) {

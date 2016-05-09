@@ -24,10 +24,8 @@
  */
 package org.spongepowered.common.data.manipulator.immutable.entity;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.entity.ImmutableFallingBlockData;
 import org.spongepowered.api.data.manipulator.mutable.entity.FallingBlockData;
@@ -175,19 +173,6 @@ public class ImmutableSpongeFallingBlockData extends AbstractImmutableData<Immut
     public FallingBlockData asMutable() {
         return new SpongeFallingBlockData(this.fallDamagePerBlock, this.maxFallDamage, this.blockState, this.canPlaceAsBlock, this.canDropAsItem,
                 this.fallTime, this.canHurtEntities);
-    }
-
-    @Override
-    public int compareTo(ImmutableFallingBlockData o) {
-        return ComparisonChain.start()
-                .compare(o.fallDamagePerBlock().get().doubleValue(), this.fallDamagePerBlock)
-                .compare(o.maxFallDamage().get().doubleValue(), this.maxFallDamage)
-                .compare(o.blockState().get().getType().getId(), this.blockState.getType().getId())
-                .compare(o.canPlaceAsBlock().get().booleanValue(), this.canPlaceAsBlock)
-                .compare(o.canDropAsItem().get().booleanValue(), this.canDropAsItem)
-                .compare(o.fallTime().get().intValue(), this.fallTime)
-                .compare(o.canHurtEntities().get().booleanValue(), this.canHurtEntities)
-                .result();
     }
 
     @Override

@@ -26,9 +26,7 @@ package org.spongepowered.common.data.manipulator.immutable.entity;
 
 import static org.spongepowered.common.data.value.SpongeValueFactory.boundedBuilder;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.entity.ImmutableExperienceHolderData;
 import org.spongepowered.api.data.manipulator.mutable.entity.ExperienceHolderData;
@@ -95,15 +93,6 @@ public class ImmutableSpongeExperienceHolderData extends AbstractImmutableData<I
     @Override
     public ExperienceHolderData asMutable() {
         return new SpongeExperienceHolderData(this.level, this.totalExp, this.expSinceLevel);
-    }
-
-    @Override
-    public int compareTo(ImmutableExperienceHolderData o) {
-        return ComparisonChain.start()
-                .compare(o.level().get().intValue(), this.level)
-                .compare(o.totalExperience().get().intValue(), this.totalExp)
-                .compare(o.experienceSinceLevel().get().intValue(), this.expSinceLevel)
-                .result();
     }
 
     @Override

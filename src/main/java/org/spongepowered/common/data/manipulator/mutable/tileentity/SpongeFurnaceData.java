@@ -24,9 +24,7 @@
  */
 package org.spongepowered.common.data.manipulator.mutable.tileentity;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.tileentity.ImmutableFurnaceData;
 import org.spongepowered.api.data.manipulator.mutable.tileentity.FurnaceData;
@@ -157,17 +155,6 @@ public class SpongeFurnaceData extends AbstractData<FurnaceData, ImmutableFurnac
     @Override
     public ImmutableFurnaceData asImmutable() {
         return new ImmutableSpongeFurnaceData(this.passedBurnTime, this.maxBurnTime, this.passedCookTime, this.maxCookTime);
-    }
-
-    @Override
-    public int compareTo(FurnaceData o) {
-        return ComparisonChain
-                .start()
-                .compare(o.passedBurnTime().get().intValue(), this.passedBurnTime)
-                .compare(o.maxBurnTime().get().intValue(), this.maxBurnTime)
-                .compare(o.passedCookTime().get().intValue(), this.passedCookTime)
-                .compare(o.maxCookTime().get().intValue(), this.maxCookTime)
-                .result();
     }
 
     @Override

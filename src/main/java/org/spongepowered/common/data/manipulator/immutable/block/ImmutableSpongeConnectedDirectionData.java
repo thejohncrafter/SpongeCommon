@@ -26,7 +26,6 @@ package org.spongepowered.common.data.manipulator.immutable.block;
 
 import com.google.common.collect.ImmutableSet;
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.block.ImmutableConnectedDirectionData;
 import org.spongepowered.api.data.manipulator.mutable.block.ConnectedDirectionData;
@@ -91,11 +90,6 @@ public class ImmutableSpongeConnectedDirectionData extends AbstractImmutableData
     @Override
     public ConnectedDirectionData asMutable() {
         return new SpongeConnectedDirectionData(this.directions);
-    }
-
-    @Override
-    public int compareTo(ImmutableConnectedDirectionData o) {
-        return 0;
     }
 
     @Override

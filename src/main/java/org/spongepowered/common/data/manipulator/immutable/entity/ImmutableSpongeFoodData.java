@@ -24,11 +24,7 @@
  */
 package org.spongepowered.common.data.manipulator.immutable.entity;
 
-import static org.spongepowered.common.data.util.ComparatorUtil.intComparator;
-
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.entity.ImmutableFoodData;
 import org.spongepowered.api.data.manipulator.mutable.entity.FoodData;
@@ -36,7 +32,6 @@ import org.spongepowered.api.data.value.immutable.ImmutableBoundedValue;
 import org.spongepowered.common.data.manipulator.immutable.common.AbstractImmutableData;
 import org.spongepowered.common.data.manipulator.mutable.entity.SpongeFoodData;
 import org.spongepowered.common.data.value.SpongeValueFactory;
-import org.spongepowered.common.data.value.immutable.ImmutableSpongeBoundedValue;
 
 public class ImmutableSpongeFoodData extends AbstractImmutableData<ImmutableFoodData, FoodData> implements ImmutableFoodData {
 
@@ -85,15 +80,6 @@ public class ImmutableSpongeFoodData extends AbstractImmutableData<ImmutableFood
     @Override
     public FoodData asMutable() {
         return new SpongeFoodData(this.foodLevel, this.foodSaturationLevel, this.foodExhaustionLevel);
-    }
-
-    @Override
-    public int compareTo(ImmutableFoodData o) {
-        return ComparisonChain.start()
-                .compare(o.foodLevel().get().intValue(), this.foodLevel)
-                .compare(o.saturation().get().floatValue(), this.foodSaturationLevel)
-                .compare(o.exhaustion().get().floatValue(), this.foodExhaustionLevel)
-                .result();
     }
 
     @Override

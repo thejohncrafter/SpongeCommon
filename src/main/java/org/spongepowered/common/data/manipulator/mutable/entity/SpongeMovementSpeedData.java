@@ -24,9 +24,7 @@
  */
 package org.spongepowered.common.data.manipulator.mutable.entity;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.entity.ImmutableMovementSpeedData;
 import org.spongepowered.api.data.manipulator.mutable.entity.MovementSpeedData;
@@ -99,14 +97,6 @@ public class SpongeMovementSpeedData extends AbstractData<MovementSpeedData, Imm
     @Override
     public ImmutableMovementSpeedData asImmutable() {
         return new ImmutableSpongeMovementSpeedData(this.walkSpeed, this.flySpeed);
-    }
-
-    @Override
-    public int compareTo(MovementSpeedData o) {
-        return ComparisonChain.start()
-                .compare(o.walkSpeed().get().doubleValue(), this.walkSpeed)
-                .compare(o.flySpeed().get().doubleValue(), this.flySpeed)
-                .result();
     }
 
     @Override

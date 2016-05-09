@@ -26,9 +26,7 @@ package org.spongepowered.common.data.manipulator.mutable.item;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.item.ImmutableDurabilityData;
 import org.spongepowered.api.data.manipulator.mutable.item.DurabilityData;
@@ -96,14 +94,6 @@ public class SpongeDurabilityData extends AbstractData<DurabilityData, Immutable
     @Override
     public ImmutableDurabilityData asImmutable() {
         return new ImmutableSpongeDurabilityData(this.defaultDurability, this.durability, this.unbreakable);
-    }
-
-    @Override
-    public int compareTo(DurabilityData o) {
-        return ComparisonChain.start()
-                .compare(this.durability, o.durability().get().intValue())
-                .compare(this.unbreakable, o.unbreakable().get())
-                .result();
     }
 
     @Override

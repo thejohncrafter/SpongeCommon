@@ -25,11 +25,9 @@
 package org.spongepowered.common.data.manipulator.mutable.entity;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ComparisonChain;
 import net.minecraft.init.Blocks;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.entity.ImmutableMinecartBlockData;
 import org.spongepowered.api.data.manipulator.mutable.entity.MinecartBlockData;
@@ -38,8 +36,6 @@ import org.spongepowered.common.data.manipulator.immutable.entity.ImmutableSpong
 import org.spongepowered.common.data.manipulator.mutable.common.AbstractData;
 import org.spongepowered.common.data.util.ImplementationRequiredForTest;
 import org.spongepowered.common.data.value.mutable.SpongeValue;
-
-import java.util.Map;
 
 @ImplementationRequiredForTest
 public class SpongeMinecartBlockData extends AbstractData<MinecartBlockData, ImmutableMinecartBlockData> implements MinecartBlockData {
@@ -78,17 +74,6 @@ public class SpongeMinecartBlockData extends AbstractData<MinecartBlockData, Imm
     @Override
     public ImmutableMinecartBlockData asImmutable() {
         return new ImmutableSpongeMinecartBlockData(this.block, this.offset);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public int compareTo(MinecartBlockData o) {
-        Map<?, ?> oTraits = o.block().get().getTraitMap();
-        Map<?, ?> traits = this.block.getTraitMap();
-        return ComparisonChain.start()
-                .compare(oTraits.entrySet().containsAll(traits.entrySet()), traits.entrySet().containsAll(oTraits.entrySet()))
-                .compare((Integer) this.offset, o.offset().get())
-                .result();
     }
 
     @Override

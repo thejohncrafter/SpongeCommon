@@ -32,7 +32,6 @@ import org.spongepowered.api.data.manipulator.DataManipulator;
 import org.spongepowered.api.data.manipulator.ImmutableDataManipulator;
 import org.spongepowered.api.data.value.BaseValue;
 import org.spongepowered.api.data.value.immutable.ImmutableSetValue;
-import org.spongepowered.common.data.manipulator.immutable.common.AbstractImmutableSingleData;
 import org.spongepowered.common.data.value.immutable.ImmutableSpongeSetValue;
 import org.spongepowered.common.util.ReflectionUtil;
 
@@ -65,8 +64,4 @@ public abstract class AbstractImmutableSingleSetData<E, I extends ImmutableDataM
         return ReflectionUtil.createInstance(this.mutableClass, this.value);
     }
 
-    @Override
-    public int compareTo(I o) {
-        return 0;
-    }
 }

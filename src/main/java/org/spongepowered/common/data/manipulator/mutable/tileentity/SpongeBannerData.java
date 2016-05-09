@@ -28,7 +28,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.collect.Lists;
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.tileentity.ImmutableBannerData;
 import org.spongepowered.api.data.manipulator.mutable.tileentity.BannerData;
@@ -99,11 +98,6 @@ public class SpongeBannerData extends AbstractData<BannerData, ImmutableBannerDa
     @Override
     public ImmutableBannerData asImmutable() {
         return new ImmutableSpongeBannerData(this.base, this.layers);
-    }
-
-    @Override
-    public int compareTo(BannerData o) {
-        return 0;
     }
 
     @Override

@@ -25,7 +25,6 @@
 package org.spongepowered.common.data.manipulator.immutable.item;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.primitives.Booleans;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.key.Keys;
@@ -46,12 +45,6 @@ public class ImmutableSpongePlaceableData extends AbstractImmutableSingleSetData
 
     public ImmutableSpongePlaceableData(Set<BlockType> placeable) {
         super(ImmutablePlaceableData.class, placeable, Keys.PLACEABLE_BLOCKS, SpongePlaceableData.class);
-    }
-
-    @Override
-    public int compareTo(ImmutablePlaceableData o) {
-        return Booleans.compare(o.placeable().containsAll(getValue()),
-                getValue().containsAll(o.placeable().get()));
     }
 
     @Override

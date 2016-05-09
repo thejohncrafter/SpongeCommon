@@ -24,7 +24,6 @@
  */
 package org.spongepowered.common.data.manipulator.immutable;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.ImmutableDisplayNameData;
@@ -62,13 +61,6 @@ public class ImmutableSpongeDisplayNameData extends AbstractImmutableSingleData<
     @Override
     public ImmutableValue<Text> displayName() {
         return this.nameValue;
-    }
-
-    @Override
-    public int compareTo(ImmutableDisplayNameData o) {
-        return ComparisonChain.start()
-                .compare(TextSerializers.JSON.serialize(o.displayName().get()), TextSerializers.JSON.serialize(this.getValue()))
-                .result();
     }
 
     @Override

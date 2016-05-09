@@ -24,16 +24,12 @@
  */
 package org.spongepowered.common.data.manipulator.immutable.tileentity;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.tileentity.ImmutableBeaconData;
 import org.spongepowered.api.data.manipulator.mutable.tileentity.BeaconData;
 import org.spongepowered.api.data.value.immutable.ImmutableOptionalValue;
 import org.spongepowered.api.effect.potion.PotionEffectType;
-import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.common.data.manipulator.immutable.common.AbstractImmutableData;
 import org.spongepowered.common.data.manipulator.mutable.tileentity.SpongeBeaconData;
 import org.spongepowered.common.data.value.immutable.ImmutableSpongeOptionalValue;
@@ -109,19 +105,4 @@ public class ImmutableSpongeBeaconData extends AbstractImmutableData<ImmutableBe
         return dataContainer;
     }
 
-    @Override
-    public int compareTo(ImmutableBeaconData o) {
-        ComparisonChain compare = ComparisonChain.start()
-                .compare(this.primaryEffect().exists(), o.primaryEffect().exists())
-                .compare(this.secondaryEffect().exists(), o.secondaryEffect().exists());
-        if (this.primaryEffect().exists() && o.primaryEffect().exists()) {
-            compare = compare.compare(this.primaryEffect().get().get().getName(), o.primaryEffect().get().get().getName())
-                    .compare(this.primaryEffect().get().get().isInstant(), o.primaryEffect().get().get().isInstant());
-        }
-        if (this.secondaryEffect().exists() && o.secondaryEffect().exists()) {
-            compare = compare.compare(this.secondaryEffect().get().get().getName(), o.secondaryEffect().get().get().getName())
-                    .compare(this.secondaryEffect().get().get().isInstant(), o.secondaryEffect().get().get().isInstant());
-        }
-        return compare.result();
-    }
 }

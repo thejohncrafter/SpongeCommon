@@ -24,7 +24,6 @@
  */
 package org.spongepowered.common.data.manipulator.immutable.entity;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.entity.ImmutableJoinData;
@@ -72,14 +71,6 @@ public class ImmutableSpongeJoinData extends AbstractImmutableData<ImmutableJoin
     @Override
     public JoinData asMutable() {
         return new SpongeJoinData(this.firstJoined, this.lastJoined);
-    }
-
-    @Override
-    public int compareTo(ImmutableJoinData o) {
-        return ComparisonChain.start()
-                .compare(o.firstPlayed().get(), this.firstJoined)
-                .compare(o.lastPlayed().get(), this.lastJoined)
-                .result();
     }
 
     @Override

@@ -28,13 +28,10 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import com.google.common.collect.ImmutableList;
 import org.spongepowered.api.data.key.Key;
-import org.spongepowered.api.data.manipulator.DataManipulator;
-import org.spongepowered.api.data.manipulator.ImmutableDataManipulator;
 import org.spongepowered.api.data.manipulator.immutable.ImmutableListData;
 import org.spongepowered.api.data.manipulator.mutable.ListData;
 import org.spongepowered.api.data.value.BaseValue;
 import org.spongepowered.api.data.value.immutable.ImmutableListValue;
-import org.spongepowered.common.data.manipulator.immutable.common.AbstractImmutableSingleData;
 import org.spongepowered.common.data.value.immutable.ImmutableSpongeListValue;
 import org.spongepowered.common.util.ReflectionUtil;
 
@@ -70,12 +67,6 @@ public abstract class AbstractImmutableListData<E, I extends ImmutableListData<E
     @Override
     public M asMutable() {
         return ReflectionUtil.createInstance(this.mutable, this.value);
-    }
-
-    @Override
-    public int compareTo(I o) {
-        final List<E> list = o.get(this.usedKey).get();
-        return Boolean.compare(list.containsAll(this.getValue()), this.getValue().containsAll(list));
     }
 
     @Override

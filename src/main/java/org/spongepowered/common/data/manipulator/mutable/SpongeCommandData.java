@@ -27,9 +27,7 @@ package org.spongepowered.common.data.manipulator.mutable;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.ImmutableCommandData;
 import org.spongepowered.api.data.manipulator.mutable.CommandData;
@@ -98,16 +96,6 @@ public class SpongeCommandData extends AbstractData<CommandData, ImmutableComman
     @Override
     public ImmutableCommandData asImmutable() {
         return new ImmutableSpongeCommandData(this.command, this.success, this.tracks, this.lastOutput);
-    }
-
-    @Override
-    public int compareTo(CommandData o) {
-        return ComparisonChain.start()
-                .compare(o.doesTrackOutput().get(), this.tracks)
-                .compare(o.lastOutput().get().isPresent(), this.lastOutput != null)
-                .compare(o.storedCommand().get(), this.command)
-                .compare(o.successCount().get().intValue(), this.success)
-                .result();
     }
 
     @Override

@@ -24,12 +24,10 @@
  */
 package org.spongepowered.common.data.manipulator.mutable.entity;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.entity.ImmutableFuseData;
 import org.spongepowered.api.data.manipulator.mutable.entity.FuseData;
 import org.spongepowered.api.data.value.mutable.Value;
-import org.spongepowered.api.world.explosion.Explosion;
 import org.spongepowered.common.data.manipulator.immutable.entity.ImmutableSpongeFuseData;
 import org.spongepowered.common.data.manipulator.mutable.common.AbstractData;
 import org.spongepowered.common.data.value.mutable.SpongeValue;
@@ -79,14 +77,6 @@ public class SpongeFuseData extends AbstractData<FuseData, ImmutableFuseData> im
     @Override
     public ImmutableFuseData asImmutable() {
         return new ImmutableSpongeFuseData(this.fuseDuration, this.ticksRemaining);
-    }
-
-    @Override
-    public int compareTo(FuseData that) {
-        return ComparisonChain.start()
-                .compare(this.fuseDuration, (int) that.fuseDuration().get())
-                .compare(this.ticksRemaining, (int) that.ticksRemaining().get())
-                .result();
     }
 
 }

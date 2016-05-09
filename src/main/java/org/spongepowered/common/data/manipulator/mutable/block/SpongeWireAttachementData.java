@@ -24,10 +24,8 @@
  */
 package org.spongepowered.common.data.manipulator.mutable.block;
 
-import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Maps;
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.block.ImmutableWireAttachmentData;
 import org.spongepowered.api.data.manipulator.mutable.block.WireAttachmentData;
@@ -86,16 +84,6 @@ public class SpongeWireAttachementData extends AbstractData<WireAttachmentData, 
     @Override
     public ImmutableWireAttachmentData asImmutable() {
         return new ImmutableSpongeWireAttachmentData(this.wireAttachmentMap);
-    }
-
-    @Override
-    public int compareTo(WireAttachmentData o) {
-        return ComparisonChain.start()
-            .compare(o.wireAttachmentNorth().get().getId(), this.wireAttachmentMap.get(Direction.NORTH).getId())
-            .compare(o.wireAttachmentSouth().get().getId(), this.wireAttachmentMap.get(Direction.SOUTH).getId())
-            .compare(o.wireAttachmentEast().get().getId(), this.wireAttachmentMap.get(Direction.EAST).getId())
-            .compare(o.wireAttachmentWest().get().getId(), this.wireAttachmentMap.get(Direction.WEST).getId())
-            .result();
     }
 
     @Override

@@ -27,9 +27,7 @@ package org.spongepowered.common.data.manipulator.immutable;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.spongepowered.common.data.value.SpongeValueFactory.boundedBuilder;
 
-import com.google.common.collect.ComparisonChain;
 import org.spongepowered.api.data.DataContainer;
-import org.spongepowered.api.data.MemoryDataContainer;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.immutable.ImmutableMobSpawnerData;
 import org.spongepowered.api.data.manipulator.mutable.MobSpawnerData;
@@ -236,19 +234,6 @@ public class ImmutableSpongeMobSpawnerData extends AbstractImmutableData<Immutab
                                         this.spawnRange,
                                         this.nextToSpawn,
                                         this.entitiesToSpawn);
-    }
-
-    @Override
-    public int compareTo(ImmutableMobSpawnerData o) {
-        return ComparisonChain.start()
-                .compare(o.remainingDelay().get().intValue(), this.remaining)
-                .compare(o.minimumSpawnDelay().get().intValue(), this.minSpawnDelay)
-                .compare(o.maximumSpawnDelay().get().intValue(), this.maxSpawnDelay)
-                .compare(o.maximumNearbyEntities().get().intValue(), this.maxNearby)
-                .compare(o.spawnCount().get().intValue(), this.count)
-                .compare(o.requiredPlayerRange().get().intValue(), this.playerRange)
-                .compare(o.spawnRange().get().intValue(), this.spawnRange)
-                .result();
     }
 
     @Override

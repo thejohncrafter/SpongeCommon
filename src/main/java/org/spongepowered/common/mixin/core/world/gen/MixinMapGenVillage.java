@@ -27,6 +27,7 @@ package org.spongepowered.common.mixin.core.world.gen;
 import com.google.common.collect.Lists;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.MapGenVillage;
 import org.spongepowered.api.world.Chunk;
@@ -35,7 +36,9 @@ import org.spongepowered.api.world.gen.structure.Village;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.common.interfaces.world.gen.IFlaggedPopulator;
 import org.spongepowered.common.world.gen.WorldGenConstants;
 
@@ -55,7 +58,15 @@ public abstract class MixinMapGenVillage extends MapGenStructure implements IFla
     @Shadow private int field_82665_g; // distance
     
     @SuppressWarnings("unchecked")
-    private List<BiomeType> validBiomes = Lists.newArrayList(MapGenVillage.villageSpawnBiomes);
+    private List<BiomeType> validBiomes = Lists.newArrayList();
+
+
+    @Inject(method = "<init>()V", at = @At("RETURN") )
+    public void onConstructed(CallbackInfo ci) {
+        for(BiomeGenBase biome: MapGenVillage.VILLAGE_SPAWN_BIOMES) {
+            this.validBiomes.add((BiomeType) biome);
+        }
+    }
     
     @Override
     public void populate(Chunk chunk, Random rand, List<String> flags) {
@@ -81,11 +92,12 @@ public abstract class MixinMapGenVillage extends MapGenStructure implements IFla
         return this.validBiomes;
     }
 
+    @SuppressWarnings("unchecked")
     @Redirect(method = "canSpawnStructureAtCoords", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/biome/WorldChunkManager;areBiomesViable(IIILjava/util/List;)Z") )
-    private boolean onAreBiomesViable(WorldChunkManager wcm, int x, int y, int z, List types) {
+            target = "Lnet/minecraft/world/biome/BiomeProvider;areBiomesViable(IIILjava/util/List;)Z") )
+    private boolean onAreBiomesViable(int x, int z, int radius, List<BiomeGenBase> types) {
         //Replace the list with our own
-        return wcm.areBiomesViable(x, y, z, this.validBiomes);
+        return this.worldObj.getBiomeProvider().areBiomesViable(x, z, radius,(List<BiomeGenBase>)(Object) this.validBiomes);
     }
     
 }

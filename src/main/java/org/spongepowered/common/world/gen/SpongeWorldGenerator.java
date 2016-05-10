@@ -88,8 +88,8 @@ public final class SpongeWorldGenerator implements WorldGenerator {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<GenerationPopulator> getGenerationPopulators(Class<? extends GenerationPopulator> type) {
-        return this.generationPopulators.stream().filter((p) -> type.isAssignableFrom(p.getClass())).collect(Collectors.toList());
+    public <G extends GenerationPopulator> List<G> getGenerationPopulators(Class<G> type) {
+        return (List<G>) this.generationPopulators.stream().filter((p) -> type.isInstance(p)).collect(Collectors.toList());
     }
 
     @Override
@@ -112,8 +112,8 @@ public final class SpongeWorldGenerator implements WorldGenerator {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Populator> getPopulators(Class<? extends Populator> type) {
-        return this.populators.stream().filter((p) -> type.isAssignableFrom(p.getClass())).collect(Collectors.toList());
+    public <P extends Populator> List<P> getPopulators(Class<P> type) {
+        return (List<P>) this.populators.stream().filter((p) -> type.isAssignableFrom(p.getClass())).collect(Collectors.toList());
     }
 
     @Override

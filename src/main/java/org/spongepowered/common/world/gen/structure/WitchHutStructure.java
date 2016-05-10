@@ -24,7 +24,8 @@
  */
 package org.spongepowered.common.world.gen.structure;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.init.Biomes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.structure.ComponentScatteredFeaturePieces;
@@ -63,8 +64,7 @@ public class WitchHutStructure implements WitchHut {
     public void populate(World world, MutableBlockVolume buffer, ImmutableBiomeArea biomes) {
         int x = buffer.getBlockMin().getX() / 16;
         int z = buffer.getBlockMin().getZ() / 16;
-        this.gen.generate(((net.minecraft.world.World) world).getChunkProvider(), (net.minecraft.world.World) world, x, z,
-                new ChunkBufferPrimer(buffer));
+        this.gen.generate((net.minecraft.world.World) world, x, z, new ChunkBufferPrimer(buffer));
     }
 
     @Override
@@ -79,7 +79,7 @@ public class WitchHutStructure implements WitchHut {
             super(chunkX, chunkZ);
             BiomeGenBase biomegenbase = world.getBiomeGenForCoords(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
 
-            if (biomegenbase == BiomeGenBase.swampland) {
+            if (biomegenbase == Biomes.SWAMPLAND) {
                 ComponentScatteredFeaturePieces.SwampHut comp =
                         new ComponentScatteredFeaturePieces.SwampHut(rand, chunkX * 16, chunkZ * 16);
                 this.components.add(comp);

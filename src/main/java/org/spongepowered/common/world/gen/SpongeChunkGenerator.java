@@ -343,6 +343,7 @@ public class SpongeChunkGenerator implements WorldGenerator, IChunkGenerator {
             } else {
                 structure.populate(chunk, this.rand);
             }
+            causeTracker.completePhase();
         }
         // Run the biome structures as well
         for (Structure structure : this.biomeSettings.get(biome).getStructures()) {
@@ -359,6 +360,7 @@ public class SpongeChunkGenerator implements WorldGenerator, IChunkGenerator {
             } else {
                 structure.populate(chunk, this.rand);
             }
+            causeTracker.completePhase();
         }
         for (Populator populator : populators) {
             final PopulatorType type = populator.getType();

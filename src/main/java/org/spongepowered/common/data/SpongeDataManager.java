@@ -117,6 +117,10 @@ public final class SpongeDataManager implements DataManager {
         return instance;
     }
 
+    public static boolean areRegistrationsComplete() {
+        return !allowRegistrations;
+    }
+
     private SpongeDataManager() {}
 
     @Override

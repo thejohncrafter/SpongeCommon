@@ -31,6 +31,7 @@ import org.spongepowered.api.block.tileentity.TileEntityType;
 import org.spongepowered.api.block.trait.BooleanTrait;
 import org.spongepowered.api.block.trait.EnumTrait;
 import org.spongepowered.api.block.trait.IntegerTrait;
+import org.spongepowered.api.data.key.Key;
 import org.spongepowered.api.data.meta.PatternLayer;
 import org.spongepowered.api.data.persistence.DataFormat;
 import org.spongepowered.api.data.type.*;
@@ -124,6 +125,7 @@ import org.spongepowered.common.registry.factory.TimingsFactoryModule;
 import org.spongepowered.common.registry.type.*;
 import org.spongepowered.common.registry.type.block.*;
 import org.spongepowered.common.registry.type.data.DataFormatRegistryModule;
+import org.spongepowered.common.registry.type.data.KeyRegistryModule;
 import org.spongepowered.common.registry.type.economy.TransactionTypeRegistryModule;
 import org.spongepowered.common.registry.type.effect.ParticleRegistryModule;
 import org.spongepowered.common.registry.type.effect.PotionEffectTypeRegistryModule;
@@ -356,6 +358,7 @@ public final class CommonModuleRegistry {
             .registerModule(ChatVisibility.class, new ChatVisibilityRegistryModule())
             .registerModule(SkinPart.class, new SkinPartRegistryModule())
             .registerModule(WorldCreationSettings.class, new WorldCreationSettingsRegistryModule())
+            .registerModule(Key.class, KeyRegistryModule.getInstance())
             ;
     }
 

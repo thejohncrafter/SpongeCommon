@@ -40,7 +40,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.Packet;
@@ -64,6 +63,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.GameType;
 import org.spongepowered.api.Sponge;
@@ -88,6 +88,8 @@ import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnCause;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.entity.living.humanoid.ChangeGameModeEvent;
+import org.spongepowered.api.event.message.MessageChannelEvent;
+import org.spongepowered.api.event.message.MessageEvent;
 import org.spongepowered.api.item.inventory.Carrier;
 import org.spongepowered.api.item.inventory.type.CarriedInventory;
 import org.spongepowered.api.network.PlayerConnection;
@@ -113,10 +115,10 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.common.SpongeImpl;
+import org.spongepowered.common.chat.ChatFormatter;
 import org.spongepowered.common.data.manipulator.mutable.entity.SpongeGameModeData;
 import org.spongepowered.common.data.manipulator.mutable.entity.SpongeJoinData;
 import org.spongepowered.common.data.util.DataConstants;
-import org.spongepowered.common.data.util.NbtDataUtil;
 import org.spongepowered.common.data.value.mutable.SpongeValue;
 import org.spongepowered.common.effect.particle.SpongeParticleEffect;
 import org.spongepowered.common.effect.particle.SpongeParticleHelper;
@@ -749,5 +751,25 @@ public abstract class MixinEntityPlayerMP extends MixinEntityPlayer implements P
         // ASK MUMFREY HOW TO GET THE FRIGGING SLOT FOR THE EVENT?!
 
         return this.dropItem(this.inventory.decrStackSize(this.inventory.currentItem, dropAll && currentItem != null ? currentItem.stackSize : 1), false, true);
+    }
+
+    @Override
+    public MessageChannelEvent.Chat simulateChat(Text message) {
+        checkNotNull(message, "message");
+
+        TextComponentTranslation component = new TextComponentTranslation("chat.type.text", SpongeTexts.toComponent(this.getDisplayNameText()), SpongeTexts.toLegacy(message));
+        ChatFormatter.formatChatComponent(component);
+        final Text[] messages = SpongeTexts.splitChatMessage(component);
+
+        final MessageChannel originalChannel = this.getMessageChannel();
+        final MessageChannelEvent.Chat event = SpongeEventFactory.createMessageChannelEventChat(
+                Cause.of(NamedCause.source(this)), originalChannel, Optional.of(originalChannel),
+                new MessageEvent.MessageFormatter(messages[0], messages[1]), message, false
+        );
+        if (!SpongeImpl.postEvent(event) && !event.isMessageCancelled()) {
+            event.getChannel().ifPresent(channel -> channel.send(this, event.getMessage(), ChatTypes.CHAT));
+            mcServer.getPlayerList().sendChatMsgImpl(SpongeTexts.toComponent(event.getMessage()), false);
+        }
+        return event;
     }
 }
